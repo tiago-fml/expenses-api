@@ -36,6 +36,31 @@ public static class Seeder
                 }
             );
         }
+
+        if (!context.Categories.Any())
+        {
+            var categoriesList = new List<Category>()
+            {
+                new ("Food"),
+                new ("Home"),
+                new ("Medical"),
+                new ("Gota"),
+                new ("Investments"),
+                new ("Jantares"),
+                new ("Gifts"),
+                new ("Personal"),
+                new ("Personal"),
+                new("Saidas"),
+                new("Carne"),
+                new("Utilities"),
+                new("Savings"),
+                new("Paycheck"),
+                new("Interest"),
+                new("Bonus"),
+            };
+            
+            context.Categories.AddRange(categoriesList);
+        }
             
         context.SaveChanges();
     }

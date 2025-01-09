@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "expenses-api", "expenses-api.csproj", "{5EE44054-3FE7-489A-A703-527F4816690E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "expenses-api.Tests", "expenses-api.Tests\expenses-api.Tests.csproj", "{D2824B80-4E4E-401C-BA3C-2A3A3C68A5C7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,9 +12,5 @@ Global
 		{5EE44054-3FE7-489A-A703-527F4816690E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE44054-3FE7-489A-A703-527F4816690E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE44054-3FE7-489A-A703-527F4816690E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2824B80-4E4E-401C-BA3C-2A3A3C68A5C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2824B80-4E4E-401C-BA3C-2A3A3C68A5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2824B80-4E4E-401C-BA3C-2A3A3C68A5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2824B80-4E4E-401C-BA3C-2A3A3C68A5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

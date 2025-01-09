@@ -8,7 +8,7 @@ public class Category : BaseEntity
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)] 
     public Guid Id { get; set; }
-    public required string Description { get; set; }
+    public string Description { get; set; }
     
     public Category(string description)
     {

@@ -21,4 +21,8 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="expenses-api.Tests\obj\project.packagespec.json" />
+    </ItemGroup>
+
 </Project>
