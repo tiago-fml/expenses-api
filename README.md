@@ -1,4 +1,7 @@
-# expenses-api
+# WORK IN PROGRESS 
+
+#expenses-api
+
 
 
 docker run --name my_postgres \
