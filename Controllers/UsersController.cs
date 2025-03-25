@@ -1,6 +1,4 @@
-﻿using expenses_api.DTOs.Role;
-using expenses_api.DTOs.User;
-using expenses_api.Enums;
+﻿using expenses_api.DTOs.User;
 using expenses_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +10,9 @@ namespace expenses_api.Controllers;
 [Authorize]
 public class UsersController(IUserService userService) : ControllerBase
 {
+    /*
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<UserDto>>> GetAllUsers()
     {
         try
@@ -25,6 +24,7 @@ public class UsersController(IUserService userService) : ControllerBase
             return BadRequest($"Error in method {nameof(GetAllUsers)}" + e.Message);
         }
     }
+    */
     
     [HttpGet]
     [Route("{id:guid}")]
@@ -47,11 +47,11 @@ public class UsersController(IUserService userService) : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<UserDto>> AddUser(UserCreateDto createDto)
+    public async Task<ActionResult<UserDTO>> AddUser(UserCreateDTO createDto)
     {
         try
         {
-            return Ok(await userService.AddUserAsync(createDto, Roles.User));
+            return Ok(await userService.AddUserAsync(createDto));
         }
         catch (Exception e)
         {
@@ -59,36 +59,8 @@ public class UsersController(IUserService userService) : ControllerBase
         }
     }
     
-    [HttpPost("create-admin")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<UserDto>> AddAdmin(UserCreateDto createDto)
-    {
-        try
-        {
-            return Ok(await userService.AddUserAsync(createDto, Roles.Admin));
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Error in method {nameof(AddAdmin)}" + e.Message);
-        }
-    }
-    
-    [HttpPost("create-employee")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<UserDto>> AddEmployee(UserCreateDto createDto)
-    {
-        try
-        {
-            return Ok(await userService.AddUserAsync(createDto, Roles.Employee));
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Error in method {nameof(AddEmployee)}" + e.Message);
-        }
-    }
-    
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<UserDto>> UpdateUser(Guid id, UserUpdateDto userUpdateDto)
+    public async Task<ActionResult<UserDTO>> UpdateUser(Guid id, UserUpdateDTO userUpdateDto)
     {
         try
         {
@@ -107,32 +79,17 @@ public class UsersController(IUserService userService) : ControllerBase
     }
     
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = "Admin")]    
+    //[Authorize(Roles = "Admin")]    
     public async Task<ActionResult> DeleteUserById(Guid id)
     {
         try
         {
-            var deletedUser = await userService.DeleteUserAsync(id);
+            await userService.DeleteUserAsync(id);
             return Ok($"User with id: {id} was deleted successfully!");
-
-            return NotFound();
         }
         catch (Exception e)
         {
             return BadRequest($"Error in method {nameof(DeleteUserById)}" + e.Message);
-        }
-    }
-    
-    [HttpGet("roles")]
-    public ActionResult<List<RoleDto>> GetAllUserRoles()
-    {
-        try
-        {
-            return Ok(userService.GetAllUserRoles());
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Error in method {nameof(GetAllUsers)}" + e.Message);
         }
     }
 }

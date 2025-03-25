@@ -4,7 +4,6 @@ namespace expenses_api.Repositories.Transactions;
 
 public interface ITransactionRepository
 {
-    Task SaveChangesAsync();
     IQueryable<Transaction> GetAllTransactionsByUserIdAsync(Guid userId);
     Task<List<Transaction>> GetAllTransactionsAsync();
     void AddTransaction(Transaction transaction);

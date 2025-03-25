@@ -11,7 +11,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return await context.Users.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<User?> GetUserByUserNameAsync(string username)
+    public async Task<User?> GetUserByUsernameAsync(string username)
     {
         return await context.Users.FirstOrDefaultAsync(x => x.Username == username);
     }   

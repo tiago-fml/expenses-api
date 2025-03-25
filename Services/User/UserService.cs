@@ -1,47 +1,67 @@
 ﻿using AutoMapper;
-using expenses_api.DTOs.Role;
 using expenses_api.DTOs.User;
-using expenses_api.Enums;
 using expenses_api.Models;
-using expenses_api.Repositories.Users;
+using expenses_api.Repositories.UnityOfWork;
 using expenses_api.Utils;
 
 namespace expenses_api.Services;
 
-public class UserService(IUserRepository userRepo, IMapper mapper) : IUserService
+public class UserService(IUnitOfWork unitOfWork, IMapper mapper) : IUserService
 {
-    public async Task<UserDto?> GetUserByIdAsync(Guid id)
+    public async Task<UserDTO?> GetUserByIdAsync(Guid id)
     {
-        var user = await userRepo.GetUserByIdAsync(id);
-        return mapper.Map<UserDto>(user);
+        var user = await unitOfWork.UserRepository.GetUserByIdAsync(id);
+        return mapper.Map<UserDTO>(user);
     }
 
-    public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+    public async Task<UserDTO?> GetUserByUsernameAsync(string username)
     {
-        var userList = await userRepo.GetAllUsersAsync();
-        return mapper.Map<List<UserDto>>(userList);
+        var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+        return user == null ? null : mapper.Map<UserDTO>(user);
     }
 
-    public async Task<UserDto> AddUserAsync(UserCreateDto userCreateDto, Roles role)
+    public async Task<UserAuthDTO> GetUserForAuthenticationAsync(string username)
     {
-        await VerifyUserDetails(userCreateDto.Username, userCreateDto.Email, userCreateDto.Password);
+        var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+        return user == null ? null : mapper.Map<UserAuthDTO>(user);
+    }
+
+    public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
+    {
+        var userList = await unitOfWork.UserRepository.GetAllUsersAsync();
+        return mapper.Map<List<UserDTO>>(userList);
+    }
+
+    public async Task<UserDTO> AddUserAsync(UserCreateDTO userCreateDto)
+    {
+        //check if there's any user with the username
+        var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(userCreateDto.Username);
+        if (user is not null)
+        {
+            throw new Exception($"The username {userCreateDto.Username} is already in use.");
+        }
         
-        var user = new User();
+        if (Helpers.IsPasswordValid(userCreateDto.Password))
+        {
+            throw new Exception(@"Password must have at least 8 characters, including at 
+                least one number and one letter in upper case");
+        }
         
+        user = new User();
         mapper.Map(userCreateDto, user);
-        user.Role = role;
+        
         user.HashedPassword = PasswordHasher.HashPassword(userCreateDto.Password);
 
-        userRepo.AddUser(user);
+        unitOfWork.UserRepository.AddUser(user);
         
-        await userRepo.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
         
-        return mapper.Map<UserDto>(user);
+        return mapper.Map<UserDTO>(user);
     }
 
-    public async Task<UserDto?> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
+    public async Task<UserDTO?> UpdateUserAsync(Guid id, UserUpdateDTO userUpdateDto)
     {
-        var user = await userRepo.GetUserByIdAsync(id);
+        var user = await unitOfWork.UserRepository.GetUserByIdAsync(id);
 
         if (user == null)
         {
@@ -50,59 +70,21 @@ public class UserService(IUserRepository userRepo, IMapper mapper) : IUserServic
 
         mapper.Map(userUpdateDto, user);
 
-        await userRepo.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
-        return mapper.Map<UserDto>(user);
+        return mapper.Map<UserDTO>(user);
     }
 
-    public async Task<bool> DeleteUserAsync(Guid id)
+    public async Task DeleteUserAsync(Guid id)
     {
-        var user = await userRepo.GetUserByIdAsync(id);
-
-        if (user == null) return false;
-        
-        userRepo.DeleteUser(user);
-        
-        await userRepo.SaveChangesAsync();
-        
-        return true;
-    }
-
-    public List<RoleDto> GetAllUserRoles()
-    {
-        List<RoleDto> roleList = Enum.GetValues(typeof(Roles))
-            .Cast<Roles>()
-            .Select(x=> new RoleDto 
-            {
-                Id = (int)x,
-                Description = x.ToString()
-            } )
-            .ToList();
-
-        return roleList;
-    }
-
-    private async Task VerifyUserDetails(string userName, string email, string password)
-    {
-        var user = await userRepo.GetUserByUserNameAsync(userName);
-
-        if (user is not null)
+        var user = await unitOfWork.UserRepository.GetUserByIdAsync(id);
+        if (user == null)
         {
-            throw new Exception($"The username {userName} is already in use.");
+            throw new Exception($"The user with id: {id} was not found.");
         }
         
-        user = await userRepo.GetUserByEmailAsync(email);
+        unitOfWork.UserRepository.DeleteUser(user);
         
-        if (user is not null)
-        {
-            throw new Exception($"The email {email} is already in use.");
-        }
-
-        if (password.Length < 8 || !password.Any(char.IsDigit) || 
-            !password.Any(char.IsLetter) || !password.Any(char.IsUpper))
-        {
-            throw new Exception(@"Password must have at least 8 characters, including at 
-                least one number and one letter in upper case");
-        }
+        await unitOfWork.SaveChangesAsync();
     }
 }

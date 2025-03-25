@@ -1,7 +1,9 @@
 ﻿using System.Text;
 using expenses_api.Repositories.Transactions;
+using expenses_api.Repositories.UnityOfWork;
 using expenses_api.Repositories.Users;
 using expenses_api.Services;
+using expenses_api.Services.Jwt;
 using expenses_api.Services.Transaction;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -73,12 +75,12 @@ public static class ProgramExtensions
 
     public static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ITransactionRepository, TransactionRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     public static void AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITransactionService, TransactionService>();
     }
