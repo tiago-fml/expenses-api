@@ -1,6 +1,6 @@
 ﻿using expenses_api.DTOs.User;
-using expenses_api.Services;
 using expenses_api.Services.Jwt;
+using expenses_api.Services.Users;
 using expenses_api.Utils;
 using Microsoft.AspNetCore.Mvc;
 

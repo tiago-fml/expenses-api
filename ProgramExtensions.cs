@@ -4,7 +4,8 @@ using expenses_api.Repositories.UnityOfWork;
 using expenses_api.Repositories.Users;
 using expenses_api.Services;
 using expenses_api.Services.Jwt;
-using expenses_api.Services.Transaction;
+using expenses_api.Services.Transactions;
+using expenses_api.Services.Users;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
