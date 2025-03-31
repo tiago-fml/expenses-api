@@ -2,18 +2,27 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
 
 namespace expenses_api.Services.Jwt;
 
 public class JwtService : IJwtService
 {
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public JwtService(IConfiguration configuration)
+    public JwtService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
 
+    public Guid? GetUserId()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return Guid.TryParse(userId, out var guid) ? guid : null;
+    }
+    
     public string GenerateJwtToken(string username, Guid userId)
     {
         var jwtKey = _configuration["Jwt:Key"];

@@ -15,6 +15,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddSwaggerConfiguration();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddServices();
