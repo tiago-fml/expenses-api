@@ -1,6 +1,6 @@
 ﻿using expenses_api.DTOs.User;
 
-namespace expenses_api.Services;
+namespace expenses_api.Services.Users;
 
 public interface IUserService
 {

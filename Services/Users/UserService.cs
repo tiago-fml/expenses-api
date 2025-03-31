@@ -4,7 +4,7 @@ using expenses_api.Models;
 using expenses_api.Repositories.UnityOfWork;
 using expenses_api.Utils;
 
-namespace expenses_api.Services;
+namespace expenses_api.Services.Users;
 
 public class UserService(IUnitOfWork unitOfWork, IMapper mapper) : IUserService
 {
@@ -52,7 +52,7 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper) : IUserService
         
         user.HashedPassword = PasswordHasher.HashPassword(userCreateDto.Password);
 
-        unitOfWork.UserRepository.AddUser(user);
+        unitOfWork.UserRepository.Add(user);
         
         await unitOfWork.SaveChangesAsync();
         
@@ -83,7 +83,7 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper) : IUserService
             throw new Exception($"The user with id: {id} was not found.");
         }
         
-        unitOfWork.UserRepository.DeleteUser(user);
+        unitOfWork.UserRepository.Remove(user);
         
         await unitOfWork.SaveChangesAsync();
     }
