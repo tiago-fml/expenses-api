@@ -84,5 +84,6 @@ public static class ProgramExtensions
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITransactionService, TransactionService>();
+        services.AddScoped<ICategoryService, CategoryService>();
     }
 }

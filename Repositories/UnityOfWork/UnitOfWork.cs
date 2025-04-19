@@ -7,14 +7,16 @@ namespace expenses_api.Repositories.UnityOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _context;
-    public IUserRepository UserRepository { get; private set; }
-    public ITransactionRepository TransactionRepository { get; private set; }
-
+    public IUserRepository UserRepository { get; }
+    public ITransactionRepository TransactionRepository { get; }
+    public ICategoryRepository CategoryRepository { get; }
+    
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
         UserRepository = new UserRepository(_context);
         TransactionRepository = new TransactionRepository(_context);
+        CategoryRepository = new CategoryRepository(_context);
     }
     
     public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();

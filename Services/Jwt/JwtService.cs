@@ -16,11 +16,11 @@ public class JwtService : IJwtService
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
     }
-
-    public Guid? GetUserId()
+    
+    public Guid GetUserId()
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return Guid.TryParse(userId, out var guid) ? guid : null;
+        return Guid.TryParse(userId, out var guid) ? guid: throw new UnauthorizedAccessException("No user id found.");
     }
     
     public string GenerateJwtToken(string username, Guid userId)

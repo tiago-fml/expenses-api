@@ -4,14 +4,18 @@ namespace expenses_api.Services.Transactions;
 
 public interface ITransactionService
 {
-    Task<IEnumerable<TransactionDto>> GetTransactionsByUserIdAsync(Guid userId, DateTimeOffset startDate,
+    Task<IEnumerable<TransactionDTO>> GetUserTransactionsAsync(DateTimeOffset startDate,
         DateTimeOffset endDate);
     
-    Task<TransactionDto> AddTransactionAsync(TransactionCreateDto transaction);
+    Task<TransactionDTO> AddTransactionAsync(TransactionCreateDTO transaction);
     
-    Task<TransactionDto?> UpdateTransactionAsync(Guid id, TransactionUpdateDto transaction);
+    Task<TransactionDTO?> UpdateTransactionAsync(Guid id, TransactionUpdateDTO transaction);
     
-    Task<TransactionDto?> GetTransactionAsync(Guid id);
+    Task<TransactionDTO?> GetTransactionAsync(Guid id);
     
-    Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync();
+    Task<IEnumerable<TransactionDTO>> GetAllTransactionsAsync();
+    
+    Task<double> GetTotalSpentAsync(DateTimeOffset startDate, DateTimeOffset endDate);
+    
+    Task<double> GetTotalEarnedAsync(DateTimeOffset startDate, DateTimeOffset endDate);
 }

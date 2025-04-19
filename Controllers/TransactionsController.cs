@@ -10,12 +10,14 @@ namespace expenses_api.Controllers;
 [Route("api/transactions")]
 public class TransactionsController(ITransactionService _transactionsService) : ControllerBase
 {
-    [HttpGet("user/{userId}")]
-    public async Task<ActionResult<IEnumerable<TransactionDto>>> GetUserTransactions(Guid userId, DateTime startDate, DateTime endDate)
+    [HttpGet("user")]
+    public async Task<ActionResult<IEnumerable<TransactionDTO>>> GetUserTransactions(DateTimeOffset startDate,
+        DateTimeOffset endDate)
     {
         try
         {
-            var list = await _transactionsService.GetTransactionsByUserIdAsync(userId,startDate, endDate);
+            var list = await _transactionsService.GetUserTransactionsAsync(
+                startDate, endDate);
             return Ok(list);
         }
         catch (Exception e)
@@ -25,7 +27,7 @@ public class TransactionsController(ITransactionService _transactionsService) : 
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<TransactionDto>> GetTransaction(Guid id)
+    public async Task<ActionResult<TransactionDTO>> GetTransaction(Guid id)
     {
         try
         {
@@ -38,22 +40,8 @@ public class TransactionsController(ITransactionService _transactionsService) : 
         }
     }
     
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllTransactions()
-    {
-        try
-        {
-            var list = await _transactionsService.GetAllTransactionsAsync();
-            return Ok(list);
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Error in method {nameof(GetAllTransactions)}" + e.Message);
-        }
-    }
-    
     [HttpPost]
-    public async Task<ActionResult<TransactionDto>> AddTransaction(TransactionCreateDto transactionCreateDto)
+    public async Task<ActionResult<TransactionDTO>> AddTransaction(TransactionCreateDTO transactionCreateDto)
     {
         try
         {
@@ -67,7 +55,7 @@ public class TransactionsController(ITransactionService _transactionsService) : 
     }
     
     [HttpPut("{id}")]
-    public async Task<ActionResult<TransactionDto>> UpdateTransaction(Guid id, TransactionUpdateDto transactionUpdateDto)
+    public async Task<ActionResult<TransactionDTO>> UpdateTransaction(Guid id, TransactionUpdateDTO transactionUpdateDto)
     {
         try
         {

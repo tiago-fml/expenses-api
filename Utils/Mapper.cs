@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using expenses_api.DTOs.Category;
 using expenses_api.DTOs.Transaction;
 using expenses_api.DTOs.User;
 using expenses_api.Models;
@@ -14,8 +15,12 @@ public class Mapper : Profile
         CreateMap<UserCreateDTO, User>();
         CreateMap<UserUpdateDTO, User>();
         
-        CreateMap<Transaction, TransactionDto>();
-        CreateMap<TransactionCreateDto, Transaction>();
-        CreateMap<TransactionUpdateDto, Transaction>();
+        CreateMap<Transaction, TransactionDTO>();
+        CreateMap<TransactionCreateDTO, Transaction>();
+        CreateMap<TransactionUpdateDTO, Transaction>();
+        
+        CreateMap<Category, CategoryDTO>();
+        CreateMap<CategoryCreateDTO, Category>();
+        CreateMap<CategoryUpdateDTO, Category>();
     }
 }

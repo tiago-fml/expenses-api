@@ -2,7 +2,7 @@ using expenses_api.Enums;
 
 namespace expenses_api.DTOs.Transaction;
 
-public class TransactionCreateDto
+public class TransactionCreateDTO
 {
     public required string Description { get; set; }
     public decimal Value { get; set; }

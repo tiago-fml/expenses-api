@@ -1,6 +1,6 @@
 namespace expenses_api.DTOs.Transaction;
 
-public class TransactionDto
+public class TransactionDTO
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

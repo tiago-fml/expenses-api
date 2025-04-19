@@ -5,15 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace expenses_api.Repositories.Users;
 
-public class UserRepository : GenericRepository<User>, IUserRepository
+public class UserRepository(ApplicationDbContext context) : GenericRepository<User>(context), IUserRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public UserRepository(ApplicationDbContext context) : base(context)
-    {
-        _context = context;
-    }
-    
     public async Task<User?> GetUserByIdAsync(Guid id)
     {
         return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);

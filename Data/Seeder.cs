@@ -14,27 +14,26 @@ public static class Seeder
 
         if (!context.Categories.Any())
         {
-            var categoriesList = new List<Category>()
+            var categoriesList = new List<Category>
             {
                 //EXPENSES
-                new("Food"),
-                new("Home"),
-                new("Medical"),
-                new("Fuel"),
-                new("Investments"),
-                new("Dinners"),
-                new("Gifts"),
-                new("Personal"),
-                new("Nights Out"),
-                new("Carne"),
-                new("Utilities"),
+                new("Food", TransactionType.EXPENSE),
+                new("Home", TransactionType.EXPENSE),
+                new("Medical", TransactionType.EXPENSE),
+                new("Fuel", TransactionType.EXPENSE),
+                new("Investments", TransactionType.EXPENSE),
+                new("Dinners", TransactionType.EXPENSE),
+                new("Gifts", TransactionType.EXPENSE),
+                new("Personal", TransactionType.EXPENSE),
+                new("Nights Out", TransactionType.EXPENSE),
+                new("Utilities", TransactionType.EXPENSE),
                 
                 //INCOMES
-                new("Savings"),
-                new("Paycheck"),
-                new("Interest"),
-                new("Bonus"),
-                new("Sales"),
+                new("Savings", TransactionType.INCOME),
+                new("Paycheck", TransactionType.INCOME),
+                new("Interest", TransactionType.INCOME),
+                new("Bonus", TransactionType.INCOME),
+                new("Sales", TransactionType.INCOME),
             };
             
             context.Categories.AddRange(categoriesList);

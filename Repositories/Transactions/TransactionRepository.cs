@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace expenses_api.Repositories.Transactions;
 
-public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
+public class TransactionRepository(ApplicationDbContext context)
+    : GenericRepository<Transaction>(context), ITransactionRepository
 {
-    private readonly ApplicationDbContext _context;
-    
-    public TransactionRepository(ApplicationDbContext context) : base(context)
-    {
-        _context = context;
-    }
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();

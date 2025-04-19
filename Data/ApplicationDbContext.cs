@@ -19,8 +19,33 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        
         modelBuilder.Entity<Transaction>(entity =>
         {
+            entity.HasOne(x=>x.User)
+                .WithMany()
+                .HasForeignKey(x=>x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.Property(t => t.Type)
+                .HasConversion(new EnumToStringConverter<TransactionType>())
+                .IsRequired();
+            
+            entity.Property(t => t.ExecutedAt)
+                .HasConversion(
+                    v => v.ToUniversalTime(),                  // Save as UTC
+                    v => DateTime.SpecifyKind(v.UtcDateTime, DateTimeKind.Utc) // Read as UTC
+                );
+        });
+        
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasOne(x=>x.User)
+                .WithMany()
+                .HasForeignKey(x=>x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             entity.Property(t => t.Type)
                 .HasConversion(new EnumToStringConverter<TransactionType>())
                 .IsRequired();

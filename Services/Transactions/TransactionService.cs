@@ -1,5 +1,6 @@
 using AutoMapper;
 using expenses_api.DTOs.Transaction;
+using expenses_api.Enums;
 using expenses_api.Models;
 using expenses_api.Repositories.UnityOfWork;
 using expenses_api.Services.Jwt;
@@ -19,33 +20,33 @@ public class TransactionService : ITransactionService
         _jwtService = jwtService;
     }
     
-    public async Task<IEnumerable<TransactionDto>> GetTransactionsByUserIdAsync(Guid userId, DateTimeOffset startDate,
+    public async Task<IEnumerable<TransactionDTO>> GetUserTransactionsAsync(DateTimeOffset startDate,
         DateTimeOffset endDate)
     {
-        var list = _unitOfWork.TransactionRepository
-            .FindByCondition(x => x.UserId == userId &&
-                x.ExecutedAt >= startDate && x.ExecutedAt <= endDate);
+        var userId = _jwtService.GetUserId();
         
-        return _mapper.Map<IEnumerable<TransactionDto>>(list);
+        var list = await _unitOfWork.TransactionRepository
+            .FindByCondition(x => x.UserId == userId &&
+                x.ExecutedAt >= startDate && x.ExecutedAt <= endDate) ?? [];
+        
+        return _mapper.Map<IEnumerable<TransactionDTO>>(list);
     }
 
-    public async Task<TransactionDto> AddTransactionAsync(TransactionCreateDto transactionCreateDto)
+    public async Task<TransactionDTO> AddTransactionAsync(TransactionCreateDTO transactionCreateDto)
     {
-        var userId = GetUserId();
-        
-        var user = _unitOfWork.UserRepository.GetUserByIdAsync(userId);
-        if(user is null){ throw new Exception("User not found"); }
+        var userId = _jwtService.GetUserId();
         
         var transaction = _mapper.Map<Transaction>(transactionCreateDto);
-
+        transaction.UserId = userId;
+        
         _unitOfWork.TransactionRepository.Add(transaction);
 
         await _unitOfWork.SaveChangesAsync();
 
-        return _mapper.Map<TransactionDto>(transaction);
+        return _mapper.Map<TransactionDTO>(transaction);
     }
 
-    public async Task<TransactionDto?> UpdateTransactionAsync(Guid id, TransactionUpdateDto transactionUpdateDto)
+    public async Task<TransactionDTO?> UpdateTransactionAsync(Guid id, TransactionUpdateDTO transactionUpdateDto)
     {
         var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
         if(transaction is null){ throw new Exception("Transaction not found"); }
@@ -53,35 +54,50 @@ public class TransactionService : ITransactionService
         _mapper.Map(transactionUpdateDto, transaction);
         
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<TransactionDto>(transaction);
+        return _mapper.Map<TransactionDTO>(transaction);
     }
 
-    public async Task<TransactionDto?> GetTransactionAsync(Guid id)
+    public async Task<TransactionDTO?> GetTransactionAsync(Guid id)
     {
         var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
 
-        if (transaction.UserId != GetUserId())
+        if (transaction.UserId != _jwtService.GetUserId())
         {
             throw new UnauthorizedAccessException();
         }
         
-        return transaction == null ? null : _mapper.Map<TransactionDto>(transaction);
+        return transaction == null ? null : _mapper.Map<TransactionDTO>(transaction);
     }
 
-    public async Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync()
+    public async Task<IEnumerable<TransactionDTO>> GetAllTransactionsAsync()
     {
         var list = await _unitOfWork.TransactionRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<TransactionDto>>(list);
+        return _mapper.Map<IEnumerable<TransactionDTO>>(list);
     }
 
-    private Guid GetUserId()
+    public async Task<double> GetTotalSpentAsync(DateTimeOffset startDate, DateTimeOffset endDate)
     {
         var userId = _jwtService.GetUserId();
-        if (userId is null)
-        {
-            throw new Exception("User id is null");
-        }
         
-        return userId.Value;
+        var list = await _unitOfWork.TransactionRepository
+            .FindByCondition(x=> x.UserId == userId && x.Type == TransactionType.EXPENSE 
+                && x.ExecutedAt >= startDate && x.ExecutedAt <= endDate);
+        
+        var expense = list.Sum(x=>x.Value);
+
+        return (double)expense;
+    }
+    
+    public async Task<double> GetTotalEarnedAsync(DateTimeOffset startDate, DateTimeOffset endDate)
+    {
+        var userId = _jwtService.GetUserId();
+        
+        var list = await _unitOfWork.TransactionRepository
+            .FindByCondition(x=>x.UserId == userId && x.Type == TransactionType.INCOME 
+                && x.ExecutedAt >= startDate && x.ExecutedAt <= endDate);
+
+        var income = list.Sum(x=>x.Value);
+        
+        return (double)income;
     }
 }

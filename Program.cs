@@ -11,7 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+    options.LogTo(Console.WriteLine);
+});
 
 builder.Services.AddSwaggerConfiguration();
 
