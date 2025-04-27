@@ -24,6 +24,14 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddServices();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 // Call the seed method here
@@ -45,6 +53,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
