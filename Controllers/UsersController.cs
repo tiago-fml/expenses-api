@@ -12,6 +12,22 @@ namespace expenses_api.Controllers;
 public class UsersController(IUserService _userService) : ControllerBase
 {
     [HttpGet]
+    [Route("currentUser")]
+    public async Task<ActionResult<UserDTO>> GetCurrenUser()
+    {
+        try
+        {
+            var user = await _userService.GetCurrentUserAsync();
+            
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return BadRequest($"Error in method {nameof(GetCurrenUser)}" + e.Message);
+        }
+    }
+    
+    [HttpGet]
     [Route("{id:guid}")]
     public async Task<ActionResult> GetUserById(Guid id)
     {

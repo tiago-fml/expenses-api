@@ -4,9 +4,10 @@ namespace expenses_api.Services.Users;
 
 public interface IUserService
 {
+    Task<UserDTO> GetCurrentUserAsync();
     Task<UserDTO?> GetUserByIdAsync(Guid userId);
     Task<UserDTO?> GetUserByUsernameAsync(string username);
-    Task<UserAuthDTO> GetUserForAuthenticationAsync(string username);
+    Task<UserAuthDTO?> GetUserForAuthenticationAsync(string username);
     Task<IEnumerable<UserDTO>> GetAllUsersAsync();
     Task<UserDTO> AddUserAsync(UserCreateDTO userCreateDto);
     Task<UserDTO?> UpdateUserAsync(Guid id, UserUpdateDTO userUpdateDto);

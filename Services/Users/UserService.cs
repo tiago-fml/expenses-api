@@ -2,12 +2,20 @@
 using expenses_api.DTOs.User;
 using expenses_api.Models;
 using expenses_api.Repositories.UnityOfWork;
+using expenses_api.Services.Jwt;
 using expenses_api.Utils;
 
 namespace expenses_api.Services.Users;
 
-public class UserService(IUnitOfWork unitOfWork, IMapper mapper) : IUserService
+public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IJwtService _jwtService) : IUserService
 {
+    public async Task<UserDTO> GetCurrentUserAsync()
+    {
+        var userId = _jwtService.GetUserId();
+        var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+        return mapper.Map<UserDTO>(user);
+    }
+    
     public async Task<UserDTO?> GetUserByIdAsync(Guid id)
     {
         var user = await unitOfWork.UserRepository.GetUserByIdAsync(id);
@@ -20,7 +28,7 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper) : IUserService
         return user == null ? null : mapper.Map<UserDTO>(user);
     }
 
-    public async Task<UserAuthDTO> GetUserForAuthenticationAsync(string username)
+    public async Task<UserAuthDTO?> GetUserForAuthenticationAsync(string username)
     {
         var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
         return user == null ? null : mapper.Map<UserAuthDTO>(user);
