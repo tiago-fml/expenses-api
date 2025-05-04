@@ -62,7 +62,7 @@ public class CategoriesController(ICategoryService _categoryService) : Controlle
         }
         catch (Exception e)
         {
-            return BadRequest($"Error in method {nameof(AddCategory)}" + e.Message);
+            return BadRequest($"Error in method {nameof(AddCategory)}: " + e.Message);
         }
     }
     
