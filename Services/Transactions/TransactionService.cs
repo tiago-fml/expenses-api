@@ -36,6 +36,17 @@ public class TransactionService : ITransactionService
     {
         var userId = _jwtService.GetUserId();
         
+        var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(transactionCreateDto.CategoryId);
+        if (category == null)
+        {
+            throw new Exception("Category not found");
+        }
+
+        if (category.Type != transactionCreateDto.Type)
+        {
+            throw new Exception("Category type not match");
+        }
+        
         var transaction = _mapper.Map<Transaction>(transactionCreateDto);
         transaction.UserId = userId;
         
