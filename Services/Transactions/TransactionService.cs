@@ -41,14 +41,10 @@ public class TransactionService : ITransactionService
         {
             throw new Exception("Category not found");
         }
-
-        if (category.Type != transactionCreateDto.Type)
-        {
-            throw new Exception("Category type not match");
-        }
         
         var transaction = _mapper.Map<Transaction>(transactionCreateDto);
         transaction.UserId = userId;
+        transaction.Type = category.Type;
         
         _unitOfWork.TransactionRepository.Add(transaction);
 
