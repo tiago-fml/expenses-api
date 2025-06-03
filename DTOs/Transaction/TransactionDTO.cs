@@ -10,5 +10,5 @@ public class TransactionDTO
     public decimal Value { get; set; }
     public DateTimeOffset ExecutedAt { get; set; }
     public Guid CategoryId { get; set; }
-    public TransactionType Type { get; set; }
+    public string Type { get; set; }
 }

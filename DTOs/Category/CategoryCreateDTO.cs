@@ -6,5 +6,5 @@ public class CategoryCreateDTO
 {
     public string Description { get; set; }
     
-    public TransactionType Type { get; set; }
+    public string Type { get; set; }
 }
