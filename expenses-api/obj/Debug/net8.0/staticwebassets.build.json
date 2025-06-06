@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "6lITA5744iGw6iS4HPOwA+AGIpS9kOKHdiNJOh9+1WY=",
+  "Source": "expenses-api",
+  "BasePath": "_content/expenses-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
