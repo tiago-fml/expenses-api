@@ -49,7 +49,7 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IJwtService _jw
             throw new Exception($"The username {userCreateDto.Username} is already in use.");
         }
         
-        if (Helpers.IsPasswordValid(userCreateDto.Password))
+        if (!Helpers.IsPasswordValid(userCreateDto.Password))
         {
             throw new Exception(@"Password must have at least 8 characters, including at 
                 least one number and one letter in upper case");
