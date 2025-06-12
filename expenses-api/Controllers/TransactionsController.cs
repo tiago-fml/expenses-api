@@ -67,4 +67,18 @@ public class TransactionsController(ITransactionService _transactionsService) : 
             return BadRequest($"Error in method {nameof(UpdateTransaction)}" + e.Message);
         }
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTransaction(Guid id)
+    {
+        try
+        {
+            await _transactionsService.DeleteTransactionAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest($"Error in method {nameof(DeleteTransaction)}" + e.Message);
+        }
+    }
 }

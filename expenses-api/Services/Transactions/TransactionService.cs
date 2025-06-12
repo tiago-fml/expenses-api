@@ -107,4 +107,13 @@ public class TransactionService : ITransactionService
         
         return (double)income;
     }
+
+    public async Task DeleteTransactionAsync(Guid id)
+    {
+        var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
+        if(transaction == null){ throw new Exception("Transaction not found"); }
+        
+        _unitOfWork.TransactionRepository.Remove(transaction);
+        await _unitOfWork.SaveChangesAsync();
+    }
 }

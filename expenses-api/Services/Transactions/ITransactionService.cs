@@ -18,4 +18,6 @@ public interface ITransactionService
     Task<double> GetTotalSpentAsync(DateTimeOffset startDate, DateTimeOffset endDate);
     
     Task<double> GetTotalEarnedAsync(DateTimeOffset startDate, DateTimeOffset endDate);
+    
+    Task DeleteTransactionAsync(Guid id);
 }
