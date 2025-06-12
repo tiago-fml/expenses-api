@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "expenses-api", "expenses-ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "expenses-api.xUnit", "expenses-api.xUnit\expenses-api.xUnit.csproj", "{1BB3AE81-CAD3-4468-ABBF-42EEF8511F9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "expenses-api.IntegrationTests", "expenses-api.IntegrationTests\expenses-api.IntegrationTests.csproj", "{2E638D22-4342-461C-8BC5-DC6C6DA66D25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{1BB3AE81-CAD3-4468-ABBF-42EEF8511F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BB3AE81-CAD3-4468-ABBF-42EEF8511F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BB3AE81-CAD3-4468-ABBF-42EEF8511F9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E638D22-4342-461C-8BC5-DC6C6DA66D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E638D22-4342-461C-8BC5-DC6C6DA66D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E638D22-4342-461C-8BC5-DC6C6DA66D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E638D22-4342-461C-8BC5-DC6C6DA66D25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
